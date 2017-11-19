@@ -1,0 +1,233 @@
+% Package `zh' to use with LaTeX 2e 
+%
+% created by Xiaofeng Wang <wasphin@gmail.com>
+%
+% Version 1.0 (02-Oct-2013)
+%
+% Copyright (C) 2013  Xiaofeng Wang <wasphin@gmail.com>
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program in doc/COPYING; if not, write to the Free
+% Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+% MA 02110-1301 USA
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\def\fileversion{1.0}
+\def\filedate{2013/10/02}
+\ProvidesPackage{zh}[
+	\filedate\space\fileversion
+	Frequently Used Chinese Environment]
+
+%% `basic' only contains common Chinese environment, fonts and size.
+\newif\if@basic\@basicfalse
+
+%% `advance' contains pdf info, contents of tables and bookmarks.
+\newif\if@advance\@advancefalse% this is default
+
+%% use common math environment
+\newif\if@mathematics\@mathematicsfalse
+
+%% use graphics
+\newif\if@graphics\@graphicsfalse
+
+\DeclareOption{basic}{\@advancefalse}
+\DeclareOption{advance}{\@advancetrue}
+\DeclareOption{default}{\@advancetrue}
+\DeclareOption{math}{\@mathematicstrue}
+\DeclareOption{graphic}{\@graphicstrue}
+\ExecuteOptions{default}
+\ProcessOptions
+
+%%%% Chinese environment packages, all CJK packages
+\RequirePackage{%
+  CJKutf8,   % contains CJK.sty
+  CJKfntef,  % contains CJKulem.sty, CJK.sty
+  CJKnumb,   % contains CJK.sty
+  % CJKvert, % vertical
+  % pinyin,  %
+  CJKpunct, CJKspace}
+% useful commands
+%
+% \CJKcaption{<caption>}
+% \CJKbold and \CJKnormal
+% \CJKuppercase
+% \CJKtilde change the definition of the `~' character
+% \CJKindent
+%
+\RequirePackage{indentfirst}
+\setlength\parindent{2em}
+
+%%%% set Chinese fonts
+\newcommand{\song}{\CJKfamily{song}}	% 宋体
+\newcommand{\hei}{\CJKfamily{hei}}	% 黑体
+\newcommand{\kai}{\CJKfamily{kai}}	% 楷体
+\newcommand{\li}{\CJKfamily{li}}	% 隶书
+\newcommand{\you}{\CJKfamily{you}}	% 幼圆
+\newcommand{\wbei}{\CJKfamily{wbei}}	% 魏碑
+
+%% Chinese fonts size
+\newcommand{\xiaochu}{\fontsize{36pt}{54pt}\selectfont}	% 小初, 1.5 倍行距
+\newcommand{\xiaoyi}{\fontsize{24pt}{36pt}\selectfont}	% 小一, 1.5 倍行距
+\newcommand{\xiaoer}{\fontsize{18pt}{27pt}\selectfont}	% 小二, 1.5 倍行距
+\newcommand{\sanhao}{\fontsize{16pt}{24pt}\selectfont}	% 三号, 1.5 倍行距
+\newcommand{\xiaosan}{\fontsize{15pt}{15pt}\selectfont}	% 小三, 1   倍行距
+\newcommand{\sihao}{\fontsize{14pt}{21pt}\selectfont}	  % 四号, 1.5 倍行距
+\newcommand{\xiaosi}{\fontsize{12pt}{18pt}\selectfont}	% 小四, 1.5 倍行距
+\newcommand{\wuhao}{\fontsize{10pt}{10pt}\selectfont}	  % 五号, 1   倍行距
+
+\newcommand*\tranditionaldate{%
+  \CJKdigits{\the\year}年% be attention that not all fonts contains `〇'
+  \CJKnumber{\the\month}月%
+  \CJKnumber{\the\day}日}
+
+\newcommand*\zhdate{%
+  {\the\year}~年~{\the\month}~月~{\the\day}~日}
+
+\@ifundefined{today}{\newcommand\today\zhdate}{\renewcommand\today\zhdate}
+
+%\if@advance
+%% will set pdf info, contents of table, bookmarks etc.
+\RequirePackage{etoolbox}% kinds of useful commands like `\AtEndPreamble'
+\RequirePackage{url}% simple package for url related
+\urlstyle{tt}% set url font
+
+\newcommand*\pdfpagemode{UseOutlines}
+\newcommand*\pdftitle{\@title}
+\newcommand*\pdfsubject{}
+\newcommand*\pdfauthor{\@author}
+
+\AtEndPreamble{%
+  \pagenumbering{arabic}% has to be issued before loading hyperref,
+                        % as to set \thepage and hence to avoid
+                        % hyperref issuing a warning and setting
+                        % pdfpagelabels=false
+  \RequirePackage[unicode]{hyperref}% unicode is required for tex that
+                                    % encodes by utf8
+  \hypersetup{%
+    % bookmarks, % default true
+    % CJKbookmarks,
+    bookmarksnumbered, % show section counter
+    bookmarksopen      = true, % false by default
+    bookmarksopenlevel = 2, % how many levels to open
+    breaklinks, % guess that to enable multi-line names
+    pdfborder          = 0 0 0,
+    pdfpagemode        = \pdfpagemode,
+    pdfstartpage       = 1,
+    % pdfcreator         = {\LaTex{} with `zh' package}, % default seems better
+    bookmarksdepth     = 3, % to show sections, subsections and subsubsections
+    pdfauthor          = \pdfauthor{},
+    pdftitle           = \pdftitle{},
+    pdfsubject         = \pdfsubject{},
+    colorlinks,
+    linktocpage, % make page number, not text, be link on TOC, LOC and LOT
+    % linkcolor          = blue,
+    % citecolor          = red,
+    % plainpages         = false,
+    pdfstartview         =FitH}}
+
+\if@advance
+%% tablesofcontents
+\RequirePackage{tocloft}% customize toc
+
+%% empty page
+\newcommand*\emptypagecontents{This page intentionally left blank.}
+\if@twoside
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \hbox{}
+  \vspace*{\fill}
+  \begin{center}
+    \emptypagecontents
+  \end{center}
+  \vspace{\fill}
+  \thispagestyle{empty}
+  \newpage
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+%% fancy header and footer
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}{
+  \fancyhf{}% clear default config
+  \fancyhead[el]{\leftmark}% even left
+  \fancyhead[or]{\rightmark}% odd right
+  \fancyfoot[el, or]{$\cdot${} \thepage{} $\cdot$}}
+\fi% end of twoside
+
+%% chapter name and empty page style
+\@ifclassloaded{book}
+               {%
+                 \RequirePackage{titlesec}
+                 \titleformat{\chapter}[display]{%
+                   \Huge\bfseries}{\filleft 第\,~\thechapter\,~章}{1em}{%
+                   \titlerule\vspace{2ex}%
+                   \filleft}
+                             [\vspace{2ex}%
+                               \titlerule]
+                 \assignpagestyle{\chaptermark}[1]{%
+                   \markboth{\small 第\,~\thechapter\,~章\quad #1}{}}}
+               {%
+                 \renewcommand{\cftsecleader}{%
+                   \bfseries\cftdotfill{\cftdotsep}}
+                 \newcommand\frontmatter{%
+                   \if@twoside\cleardoublepage\else\clearpage\fi%
+                   \pagenumbering{roman}}
+                 \newcommand\mainmatter{%
+                   \if@twoside\cleardoublepage\else\clearpage\fi%
+                   \pagenumbering{arabic}}
+                 \newcommand\backmatter{%
+                   \if@twoside\cleardoublepage\else\clearpage\fi}}
+% end of book
+
+\renewcommand{\sectionmark}[1]{\markright{\small\thesection\quad #1}{}}
+
+\renewcommand{\contentsname}{\centerline{目\qquad录}}%
+%\renewcommand{\refname}{参~考~文~献}%
+\renewcommand{\appendixname}{\centerline{附\qquad录}}%
+%\renewcommand{\figurename}{图}%
+%\renewcommand{\listfigurename}{}%
+%\renewcommand{tablename}{表}%
+%\renewcommand{\listtablename}{}%
+
+\newcommand*{\fillunderline}[2]{%
+  \underline{\hbox to #1 {\hfill#2\hfill}}}
+
+\fi% end of advance
+
+%% mathematics
+\if@mathematics
+\RequirePackage{%
+  amsmath, amsthm,
+  amsfonts, mathrsfs,
+  bm,relsize}
+
+\theoremstyle{plain}
+\newtheorem{alg}{算法~} % algorithm
+\newtheorem{thm}{定理~} % theorem
+\newtheorem{lem}[thm]{引理~} % lemma
+\newtheorem{pro}[thm]{命题~} % proposition
+\newtheorem{cor}[thm]{推论~} % corollary
+\theoremstyle{definition}
+\newtheorem{defn}{定义~}
+\newtheorem{conj}{猜想~} % conjecture
+\newtheorem{exmp}{例~} % example
+\newtheorem{remk}{注~} % remark
+\newtheorem{case}{情形~} % case
+\newtheorem{disc}{讨论~} % discuss
+\renewcommand{\proofname}{{\kai 证明}}
+
+\fi% end of matematics
+
+\if@graphics
+\RequirePackage{graphicx}
+\fi% end of graphics
+
+\endinput
