@@ -1,0 +1,113 @@
+% This is the file `zh-style.sty' of `zh' package
+%   for providing Chinese styles.
+%
+% created by Xiaofeng Wang <wasphin@gmail.com>
+%
+% Version 1.1 (31-Jan-2020)
+%
+% Copyright (C) 2013-2020  Xiaofeng Wang <wasphin@gmail.com>
+%
+% This program is free software; you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation; either version 2 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program in doc/COPYING; if not, write to the Free
+% Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
+% MA 02110-1301 USA
+
+\def\fileversion{1.1}
+\def\filedate{2020/01/31}
+\ProvidesPackage{zh-style}[\filedate\space\fileversion]
+
+
+%% will set pdf info, contents of table, bookmarks etc.
+\RequirePackage{etoolbox}% kinds of useful commands like `\AtEndPreamble'
+\RequirePackage{url}% simple package for url related
+\urlstyle{tt}% set url font
+
+\newcommand*\pdfpagemode{UseOutlines}
+\newcommand*\pdftitle{\@title}
+\newcommand*\pdfsubject{}
+\newcommand*\pdfauthor{\@author}
+
+\AtEndPreamble{%
+  \pagenumbering{arabic}% has to be issued before loading hyperref,
+                        % as to set \thepage and hence to avoid
+                        % hyperref issuing a warning and setting
+                        % pdfpagelabels=false
+  \RequirePackage[unicode]{hyperref}% unicode is required for tex that
+                                    % encodes by utf8
+  \hypersetup{%
+    % bookmarks, % default true
+    % CJKbookmarks,
+    bookmarksnumbered, % show section counter
+    bookmarksopen      = true, % false by default
+    bookmarksopenlevel = 2, % how many levels to open
+    breaklinks, % guess that to enable multi-line names
+    pdfborder          = 0 0 0,
+    pdfpagemode        = \pdfpagemode,
+    pdfstartpage       = 1,
+    % pdfcreator         = {\LaTex{} with `zh' package}, % default seems better
+    bookmarksdepth     = 3, % to show sections, subsections and subsubsections
+    pdfauthor          = \pdfauthor{},
+    pdftitle           = \pdftitle{},
+    pdfsubject         = \pdfsubject{},
+    colorlinks,
+    linktocpage, % make page number, not text, be link on TOC, LOC and LOT
+    % linkcolor          = blue,
+    % citecolor          = red,
+    % plainpages         = false,
+    pdfstartview         =FitH}}
+
+
+%% tablesofcontents
+\RequirePackage{tocloft}% customize toc
+
+%% empty page
+\newcommand*\emptypagecontents{This page intentionally left blank.}
+\if@twoside
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+  \hbox{}
+  \vspace*{\fill}
+  \begin{center}
+    \emptypagecontents
+  \end{center}
+  \vspace{\fill}
+  \thispagestyle{empty}
+  \newpage
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+%% fancy header and footer
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}{
+  \fancyhf{}% clear default config
+  \fancyhead[el]{\leftmark}% even left
+  \fancyhead[or]{\rightmark}% odd right
+  \fancyfoot[el, or]{$\cdot${} \thepage{} $\cdot$}}
+\fi% end of twoside
+
+%% chapter name and empty page style
+\@ifclassloaded{article}{\RequirePackage{zh-style-article}}{}
+\@ifclassloaded{book}{\RequirePackage{zh-style-book}}{}
+
+\renewcommand{\sectionmark}[1]{\markright{\small\thesection\quad #1}{}}
+
+\renewcommand{\contentsname}{\centerline{目\qquad录}}%
+%\renewcommand{\refname}{参~考~文~献}%
+\renewcommand{\appendixname}{\centerline{附\qquad录}}%
+%\renewcommand{\figurename}{图}%
+%\renewcommand{\listfigurename}{}%
+%\renewcommand{tablename}{表}%
+%\renewcommand{\listtablename}{}%
+
+\newcommand*{\fillunderline}[2]{%
+  \underline{\hbox to #1 {\hfill#2\hfill}}}
+
+\endinput

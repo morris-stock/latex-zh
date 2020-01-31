@@ -1,4 +1,4 @@
-% Package `zh-math' to use with LaTeX 2e
+% This is the file `zh-style-book.sty' of `zh' package.
 %
 % created by Xiaofeng Wang <wasphin@gmail.com>
 %
@@ -23,26 +23,16 @@
 
 \def\fileversion{1.1}
 \def\filedate{2020/01/31}
-\ProvidesPackage{zh-math}[\filedate\space\fileversion]
+\ProvidesPackage{zh-style-book}[\filedate\space\fileversion]
 
-\RequirePackage{%
-  amsmath, amsthm,
-  amsfonts, mathrsfs,
-  bm, relsize}
-
-\theoremstyle{plain}
-\newtheorem{alg}{算法~} % algorithm
-\newtheorem{thm}{定理~} % theorem
-\newtheorem{lem}[thm]{引理~} % lemma
-\newtheorem{pro}[thm]{命题~} % proposition
-\newtheorem{cor}[thm]{推论~} % corollary
-\theoremstyle{definition}
-\newtheorem{defn}{定义~}
-\newtheorem{conj}{猜想~} % conjecture
-\newtheorem{exmp}{例~} % example
-\newtheorem{remk}{注~} % remark
-\newtheorem{case}{情形~} % case
-\newtheorem{disc}{讨论~} % discuss
-\renewcommand{\proofname}{{\kai 证明}}
+\RequirePackage{titlesec}
+\titleformat{\chapter}[display]{%
+  \Huge\bfseries}{\filleft 第\,~\thechapter\,~章}{1em}{%
+  \titlerule\vspace{2ex}%
+  \filleft}
+[\vspace{2ex}%
+\titlerule]
+\assignpagestyle{\chaptermark}[1]{%
+  \markboth{\small 第\,~\thechapter\,~章\quad #1}{}}
 
 \endinput
